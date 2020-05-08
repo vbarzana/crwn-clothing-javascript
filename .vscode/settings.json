@@ -1,0 +1,9 @@
+{
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "emmet.syntaxProfiles": {
+    "javascript": "jsx"
+  }
+}
