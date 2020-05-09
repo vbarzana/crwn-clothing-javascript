@@ -20,9 +20,11 @@ class App extends React.Component {
   handleAppClick = event => {
     const cartRef = document.querySelector('.cart-icon');
     const cartDropDownRef = document.querySelector('.cart-dropdown');
+
     const { setHidden, hidden } = this.props;
     if (
       !hidden &&
+      event.target.className.indexOf('add-to-cart') < 0 &&
       cartRef &&
       !cartRef.contains(event.target) &&
       cartDropDownRef &&
