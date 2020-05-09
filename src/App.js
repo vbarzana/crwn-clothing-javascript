@@ -21,7 +21,6 @@ class App extends React.Component {
     const cartRef = document.querySelector('.cart-icon');
     const cartDropDownRef = document.querySelector('.cart-dropdown');
     const { setHidden, hidden } = this.props;
-    console.log(hidden);
     if (
       !hidden &&
       cartRef &&

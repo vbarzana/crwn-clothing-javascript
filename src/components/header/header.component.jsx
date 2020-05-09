@@ -42,6 +42,7 @@ const Header = ({ currentUser, hidden }) => (
 //   currentUser: selectCurrentUser(state),
 //   hidden: selectCartHidden(state)
 // });
+
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
   hidden: selectCartHidden
