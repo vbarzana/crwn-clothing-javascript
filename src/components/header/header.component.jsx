@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
-import CartIcon from '../cart-icon/cart-icon.component';
-import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import CartIcon from '../cart/cart-icon/cart-icon.component';
+import CartDropdown from '../cart/cart-dropdown/cart-dropdown.component';
 import { auth } from '../../firebase/firebase.utils';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 
-const Header = ({ currentUser, hidden }) => (
+const Header = ({ currentUser, hidden, dispatch }) => (
   <div className='header'>
     <Link className='logo-container' to='/'>
       <Logo className='logo' />

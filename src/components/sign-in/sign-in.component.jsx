@@ -1,7 +1,7 @@
 import React from 'react';
 import './sign-in.styes.scss';
-import FormInput from '../form-input/form-input.component';
-import CustomButton from '../custom-button/custom-button.component';
+import FormInput from '../generic/form-input/form-input.component';
+import CustomButton from '../generic/custom-button/custom-button.component';
 
 import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
 
