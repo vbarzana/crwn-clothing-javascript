@@ -36,6 +36,7 @@ const CheckoutPage = ({ cartItems, total }) => (
     <div className='total'>
       <span>TOTAL: ${total}</span>
     </div>
+    <button onClick={()=>{alert('hi there.')}}>Hello Heidi</button>
   </div>
 );
 
