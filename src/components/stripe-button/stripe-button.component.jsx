@@ -19,7 +19,7 @@ const StripeCheckoutButton = ({ price }) => {
       amount={priceForStripe} // cents
       stripeKey={publishableKey}
       shippingAddress
-      billingAddress
+      //billingAddress
       // Note: enabling both zipCode checks and billing or shipping address will
       // cause zipCheck to be pulled from billing address (set to shipping if none provided).
     //   zipCode={false}
