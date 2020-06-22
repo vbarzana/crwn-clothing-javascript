@@ -12,8 +12,6 @@ const config = {
   appId: process.env.REACT_APP_BACKEND_SENDER_APP_ID,
 };
 
-console.log(config);
-
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
 
