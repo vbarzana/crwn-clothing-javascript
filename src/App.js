@@ -13,14 +13,17 @@ import { setCurrentUser } from './redux/user/user.actions';
 import { setHidden } from './redux/cart/cart.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import { selectCartHidden } from './redux/cart/cart.selectors';
+import {CartIconContainer} from './components/cart/cart-icon/cart-icon.styles'
+import {CartDropDownContainer} from './components/cart/cart-dropdown/cart-dropdown.styles'
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
   handleAppClick = event => {
-    const cartRef = document.querySelector('.cart-icon');
-    const cartDropDownRef = document.querySelector('.cart-dropdown');
+    const cartRef = document.querySelector(CartIconContainer);
+    const cartDropDownRef = document.querySelector(CartDropDownContainer);
+    console.log(CartDropDownContainer);
 
     const { setHidden, hidden } = this.props;
     if (
@@ -35,6 +38,7 @@ class App extends React.Component {
       setHidden();
     }
   };
+
   componentDidMount() {
     document.body.addEventListener('click', this.handleAppClick);
     const { setCurrentUser } = this.props;
