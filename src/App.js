@@ -23,7 +23,6 @@ class App extends React.Component {
   handleAppClick = event => {
     const cartRef = document.querySelector(CartIconContainer);
     const cartDropDownRef = document.querySelector(CartDropDownContainer);
-    console.log(CartDropDownContainer);
 
     const { setHidden, hidden } = this.props;
     if (
