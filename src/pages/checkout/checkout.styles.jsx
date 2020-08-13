@@ -1,4 +1,6 @@
-.checkout-page {
+import styled from 'styled-components';
+
+export const CheckoutPageContainer = styled.div`
   width: 55%;
   min-height: 90vh;
   display: flex;
@@ -6,6 +8,7 @@
   align-items: center;
   margin: 50px auto 0;
 
+  // @todo: move to another element later on
   .checkout-header {
     width: 100%;
     padding: 10px 0;
@@ -23,6 +26,7 @@
     }
   }
 
+  // @todo: move to another element later on
   .total {
     margin-top: 30px;
     margin-left: auto;
@@ -34,10 +38,11 @@
     margin-top: 50px;
   }
 
+  // @todo: move to another element later on
   .test-warning {
     text-align: center;
     margin-top: 40px;
     font-size: 24px;
     color: red;
   }
-}
+`;

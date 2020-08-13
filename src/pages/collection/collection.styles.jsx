@@ -1,4 +1,7 @@
-.collection-page {
+import styled from 'styled-components';
+import { CollectionItemContainer } from '../../components/collection/collection-item/collection-item.styles';
+
+export const CollectionPageContainer = styled.div`
   display: flex;
   flex-direction: column;
 
@@ -15,7 +18,7 @@
     margin: auto;
   }
 
-  &.collection-item {
+  &${CollectionItemContainer} {
     margin-bottom: 30px;
   }
-}
+`;

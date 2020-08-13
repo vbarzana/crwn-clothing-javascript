@@ -9,10 +9,10 @@ import {
 import CheckoutItem from '../../components/cart/checkout-item/checkout-item.component';
 import StripeCheckoutComponent from '../../components/stripe-button/stripe-button.component';
 
-import './checkout.styles.scss';
+import {CheckoutPageContainer} from './checkout.styles';
 
 const CheckoutPage = ({ cartItems, total }) => (
-  <div className='checkout-page'>
+  <CheckoutPageContainer>
     <div className='checkout-header'>
       <div className='header-block'>
         <span>Product</span>
@@ -42,7 +42,7 @@ const CheckoutPage = ({ cartItems, total }) => (
     </div>
 
     <StripeCheckoutComponent price={total} />
-  </div>
+  </CheckoutPageContainer>
 );
 
 const mapStateToProps = createStructuredSelector({
