@@ -42,7 +42,7 @@ class App extends React.Component {
 
   componentDidMount() {
     document.body.addEventListener('click', this.handleAppClick);
-    const { setCurrentUser, collectionsArray } = this.props;
+    const { setCurrentUser } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
