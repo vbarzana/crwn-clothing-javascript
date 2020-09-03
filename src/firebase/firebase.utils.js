@@ -1,6 +1,6 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 
 const config = {
   apiKey: process.env.REACT_APP_BACKEND_API_KEY,
@@ -9,7 +9,7 @@ const config = {
   projectId: process.env.REACT_APP_BACKEND_PROJECT_ID,
   storageBucket: process.env.REACT_APP_BACKEND_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_BACKEND_MESSAGE_SENDER_ID,
-  appId: process.env.REACT_APP_BACKEND_SENDER_APP_ID,
+  appId: process.env.REACT_APP_BACKEND_SENDER_APP_ID
 };
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
@@ -27,13 +27,24 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         displayName,
         email,
         createdAt,
-        ...additionalData,
+        ...additionalData
       });
     } catch (error) {
-        console.log('error creating user', error.message);
+      console.log('error creating user', error.message);
     }
   }
   return userRef;
+};
+
+export const addCollectionAndDocuments = (collectionKey, objectsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey);
+  const batch = firestore.batch();
+
+  objectsToAdd.forEach(obj => {
+    const newDocRef = collectionRef.add(obj);
+    batch.set(newDocRef, obj);
+  });
+  batch.commit();
 };
 
 firebase.initializeApp(config);
@@ -42,7 +53,7 @@ export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
 const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
+provider.setCustomParameters({ prompt: 'select_account' });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
