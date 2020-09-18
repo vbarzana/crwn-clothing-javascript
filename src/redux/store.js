@@ -6,7 +6,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import rootReducer from './root-reducer';
 
-import { fetchCollectionsStart } from './shop/shop.sagas';
+import rootSaga from './root-saga';
 // action -> middleware -> rootReducer -> store -> DOM Changes
 
 const sagaMiddleware = createSagaMiddleware();
@@ -31,7 +31,7 @@ const enhancer = composeEnhancers(
 
 export const store = createStore(rootReducer, enhancer);
 
-sagaMiddleware.run(fetchCollectionsStart);
+sagaMiddleware.run(rootSaga);
 
 export const persistor = persistStore(store);
 
