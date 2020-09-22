@@ -53,21 +53,18 @@ export const convertCollectionsSnapshotToMap = collections => {
   }, {});
 };
 
-// This could be used to import data into firebase
-// export const addAllCollectionsToFirebase = (collectionKey, objectsToAdd) => {
-//   const collectionRef = firestore.collection(collectionKey);
-//   const batch = firestore.batch();
-//   objectsToAdd.forEach(item => {
-//     const newDocRef = collectionRef.doc();
-//     console.log(item);
-//     batch.set(newDocRef, item);
-//   });
-//   batch.commit();
-// };
-
 firebase.initializeApp(config);
-
 export const auth = firebase.auth();
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      resolve(userAuth);
+      unsubscribe();
+    }, reject);
+  });
+};
+
 export const firestore = firebase.firestore();
 
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
