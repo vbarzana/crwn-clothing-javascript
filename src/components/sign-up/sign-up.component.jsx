@@ -1,9 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import FormInput from '../generic/form-input/form-input.component';
 import CustomButton from '../generic/custom-button/custom-button.component';
 
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import { emailSignUpStart } from '../../redux/user/user.actions';
+import {selectSignUpError } from '../../redux/user/user.selectors';
 
 import './sign-up.styles.scss';
 
@@ -14,45 +17,35 @@ class SignUp extends React.Component {
       displayName: '',
       email: '',
       password: '',
-      confirmPassword: '',
+      confirmPassword: ''
     };
   }
 
-  handleSubmit = async (event) => {
+  handleSubmit = async event => {
     event.preventDefault();
-
+    const { emailSignUpStart } = this.props;
     const { displayName, email, password, confirmPassword } = this.state;
 
     if (password !== confirmPassword) {
-
       alert("passwords don't match");
       return;
     }
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      await createUserProfileDocument(user, { displayName });
-
-      this.setState({
-        displayName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    emailSignUpStart({
+      email,
+      password,
+      displayName
+    });
   };
 
-  handleChange = (event) => {
+  handleChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
   render() {
     const { displayName, email, password, confirmPassword } = this.state;
+    const { signUpError } = this.props;
+
     return (
       <div className='sign-up'>
         <h2 className='title'>I do not have an account</h2>
@@ -64,6 +57,7 @@ class SignUp extends React.Component {
             value={displayName}
             onChange={this.handleChange}
             label='Display Name'
+            autoComplete='displayName'
             required
           />
           <FormInput
@@ -93,6 +87,11 @@ class SignUp extends React.Component {
             label='Confirm password'
             required
           />
+          <span
+            style={{ color: 'red', display: 'flex', paddingBottom: '25px' }}
+          >
+            {signUpError}
+          </span>
           <CustomButton type='submit'> SIGN UP </CustomButton>
         </form>
       </div>
@@ -100,4 +99,12 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+const mapDispatchToProps = dispatch => ({
+  emailSignUpStart: userCredentials =>
+    dispatch(emailSignUpStart(userCredentials))
+});
+
+const mapStateToProps = createStructuredSelector({
+  signUpError: selectSignUpError
+});
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

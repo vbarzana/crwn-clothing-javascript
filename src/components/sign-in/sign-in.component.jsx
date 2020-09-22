@@ -3,6 +3,9 @@ import './sign-in.styes.scss';
 import FormInput from '../generic/form-input/form-input.component';
 import CustomButton from '../generic/custom-button/custom-button.component';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
+import { selectError } from '../../redux/user/user.selectors';
 
 import {
   googleSignInStart,
@@ -10,13 +13,10 @@ import {
 } from '../../redux/user/user.actions';
 
 class SignIn extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: ''
-    };
-  }
+  state = {
+    email: '',
+    password: ''
+  };
 
   handleSubmit = async event => {
     event.preventDefault();
@@ -32,7 +32,7 @@ class SignIn extends React.Component {
   };
 
   render() {
-    const { googleSignInStart } = this.props;
+    const { googleSignInStart, error } = this.props;
     return (
       <div className='sign-in'>
         <h2>I already have an account</h2>
@@ -46,8 +46,8 @@ class SignIn extends React.Component {
             label='Email'
             handleChange={this.handleChange}
             required
-            />
-            <FormInput
+          />
+          <FormInput
             name='password'
             type='password'
             label='Password'
@@ -56,6 +56,11 @@ class SignIn extends React.Component {
             handleChange={this.handleChange}
             required
           />
+          <span
+            style={{ color: 'red', display: 'flex', paddingBottom: '25px' }}
+          >
+            {error}
+          </span>
           <div className='buttons'>
             <CustomButton type='submit'>Sign In</CustomButton>
             <CustomButton
@@ -78,4 +83,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(emailSignInStart({ email, password }))
 });
 
-export default connect(null, mapDispatchToProps)(SignIn);
+const mapStateToProps = createStructuredSelector({
+  error: selectError
+});
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
