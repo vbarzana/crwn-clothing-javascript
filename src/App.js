@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -17,65 +17,37 @@ import { checkUserSession } from './redux/user/user.actions';
 
 import { setHidden } from './redux/cart/cart.actions';
 import { selectCartHidden } from './redux/cart/cart.selectors';
-import { CartIconContainer } from './components/cart/cart-icon/cart-icon.styles';
-import { CartDropDownContainer } from './components/cart/cart-dropdown/cart-dropdown.styles';
-
 import { selectCollectionsForPreview } from './redux/shop/shop.selectors';
 
-class App extends React.Component {
-  unsubscribeFromAuth = null;
-  handleAppClick = event => {
-    const cartRef = document.querySelector(CartIconContainer);
-    const cartDropDownRef = document.querySelector(CartDropDownContainer);
+const App = ({ checkUserSession, currentUser, setHidden, hidden }) => {
+  useEffect(() => {
+    checkUserSession();
+  }, [checkUserSession]);
 
-    const { setHidden, hidden } = this.props;
-    if (
-      !hidden &&
-      (!event.target.className ||
-        event.target.className.toString().indexOf('add-to-cart') < 0) &&
-      cartRef &&
-      !cartRef.contains(event.target) &&
-      cartDropDownRef &&
-      !cartDropDownRef.contains(event.target)
-    ) {
+  const handleAppClick = () => {
+    if (!hidden) {
       setHidden();
     }
   };
 
-  componentDidMount() {
-    document.body.addEventListener('click', this.handleAppClick);
-    const { checkUserSession } = this.props;
-    checkUserSession();
-  }
-
-  componentWillUnmount() {
-    document.body.removeEventListener('click', this.handleAppClick);
-  }
-
-  render() {
-    return (
-      <div>
-        <Header />
-        <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route path='/shop' component={ShopPage} />
-          <Route exact path='/checkout' component={CheckoutPage} />
-          <Route
-            exact
-            path='/signin'
-            render={() =>
-              this.props.currentUser ? (
-                <Redirect to='/' />
-              ) : (
-                <SignInAndSignUpPage />
-              )
-            }
-          />
-        </Switch>
-      </div>
-    );
-  }
-}
+  return (
+    <div onClick={handleAppClick}>
+      <Header />
+      <Switch>
+        <Route exact path='/' component={HomePage} />
+        <Route path='/shop' component={ShopPage} />
+        <Route exact path='/checkout' component={CheckoutPage} />
+        <Route
+          exact
+          path='/signin'
+          render={() =>
+            currentUser ? <Redirect to='/' /> : <SignInAndSignUpPage />
+          }
+        />
+      </Switch>
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
