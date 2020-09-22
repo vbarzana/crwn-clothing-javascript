@@ -1,22 +1,24 @@
 import React from 'react';
-import './App.css';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+
+import './App.css';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout-component';
+
 import Header from './components/header/header.component';
-import { setCurrentUser } from './redux/user/user.actions';
-import { setHidden } from './redux/cart/cart.actions';
+
 import { selectCurrentUser } from './redux/user/user.selectors';
+import { checkUserSession } from './redux/user/user.actions';
+
+import { setHidden } from './redux/cart/cart.actions';
 import { selectCartHidden } from './redux/cart/cart.selectors';
 import { CartIconContainer } from './components/cart/cart-icon/cart-icon.styles';
 import { CartDropDownContainer } from './components/cart/cart-dropdown/cart-dropdown.styles';
-
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 import { selectCollectionsForPreview } from './redux/shop/shop.selectors';
 
@@ -42,31 +44,12 @@ class App extends React.Component {
 
   componentDidMount() {
     document.body.addEventListener('click', this.handleAppClick);
-    const { setCurrentUser } = this.props;
-
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        try {
-          const userRef = await createUserProfileDocument(userAuth);
-
-          userRef.onSnapshot(snapshot => {
-            setCurrentUser({
-              id: snapshot.id,
-              ...snapshot.data()
-            });
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      setCurrentUser(userAuth);
-    });
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
     document.body.removeEventListener('click', this.handleAppClick);
-
-    this.unsubscribeFromAuth();
   }
 
   render() {
@@ -101,8 +84,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user)),
-  setHidden: cart => dispatch(setHidden(cart))
+  setHidden: cart => dispatch(setHidden(cart)),
+  checkUserSession: () => dispatch(checkUserSession())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
