@@ -9,6 +9,7 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout-component';
+import PaymentSuccess from './pages/payment-success/payment-success.component';
 
 import Header from './components/header/header.component';
 
@@ -37,6 +38,7 @@ const App = ({ checkUserSession, currentUser, setHidden, hidden }) => {
         <Route exact path='/' component={HomePage} />
         <Route path='/shop' component={ShopPage} />
         <Route exact path='/checkout' component={CheckoutPage} />
+        <Route exact path='/success' component={PaymentSuccess} />
         <Route
           exact
           path='/signin'

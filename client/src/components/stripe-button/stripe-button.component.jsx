@@ -1,41 +1,54 @@
 import React from 'react';
-import StripeCheckout from 'react-stripe-checkout';
+import axios from 'axios';
+import { loadStripe } from '@stripe/stripe-js';
 
-const StripeCheckoutButton = ({ price }) => {
+import './stripe-button.styles.scss';
+
+const publishableKey = 'pk_test_d5aXvKEuhBTxYhyL7F3L95jU009Zmhh81e';
+const stripePromise = loadStripe(publishableKey);
+
+const StripeCheckoutButton = ({ price, cartItems }) => {
   const priceForStripe = price * 100;
-  const publishableKey = 'pk_test_3EwbqW0naQFvIpmD4x3lF08b';
 
-  const onToken = token=> {
-    alert('Payment Successful');
-  }
+  const handleClick = async () => {
+    try {
+      // Get Stripe.js instance
+      const stripe = await stripePromise;
+      const description = cartItems.reduce((acc, item) => {
+        acc.push(`${item.quantity} ${item.name}`);
+        return acc;
+      }, []);
+      // Call your backend to create the Checkout Session
+      const { data: session } = await axios({
+        url: '/create-checkout-session',
+        method: 'POST',
+        data: {
+          amount: priceForStripe,
+          productsDescription: description.join(', '),
+          // @todo: in the future pass all products here
+          quantity: 1
+        }
+      });
+      // When the customer clicks on the button, redirect them to Checkout.
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id
+      });
+
+      if (result.error) {
+        console.error(result.error);
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, display the localized error message to your customer
+        // using `result.error.message`.
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <StripeCheckout
-      name='Pay now'
-      description={`Your total is $${price}`}// the pop-in header subtitle
-      image='https://files.codegenio.com/static/2020/04/22141803/codegenio-logo.png' // the pop-in header image (default none)
-      panelLabel='Please fill in the data and proceed to the payment.'
-      amount={priceForStripe} // cents
-      stripeKey={publishableKey}
-      shippingAddress
-      //billingAddress
-      // Note: enabling both zipCode checks and billing or shipping address will
-      // cause zipCheck to be pulled from billing address (set to shipping if none provided).
-    //   zipCode={false}
-    //   alipay // accept Alipay (default false)
-    //   bitcoin // accept Bitcoins (default false)
-      allowRememberMe // "Remember Me" option (default true)
-      token={onToken} // submit callback
-      //opened={this.onOpened} // called when the checkout popin is opened (no IE6/7)
-      //closed={this.onClosed} // called when the checkout popin is closed (no IE6/7)
-      // Note: `reconfigureOnUpdate` should be set to true IFF, for some reason
-      // you are using multiple stripe keys
-      //reconfigureOnUpdate={false}
-      // Note: you can change the event to `onTouchTap`, `onClick`, `onTouchStart`
-      // useful if you're using React-Tap-Event-Plugin
-      //triggerEvent='onTouchTap'
-    >
-    </StripeCheckout>
+    <button className='stripe-button' onClick={handleClick}>
+      Pay now
+    </button>
   );
 };
 
