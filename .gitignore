@@ -34,3 +34,4 @@ yarn-debug.log*
 /client/yarn-debug.log*
 yarn-error.log*
 /client/yarn-error.log*
+.env
