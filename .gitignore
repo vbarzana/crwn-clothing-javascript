@@ -36,3 +36,4 @@ yarn-error.log*
 /client/yarn-error.log*
 .env
 /.idea
+.netlify/edge-functions-import-map.json
